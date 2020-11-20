@@ -29,16 +29,16 @@ class CardReader(object):
 	def registerReader(self, edge = 'falling', pull_up_down=RPIO.PUD_UP):
 		RPIO.setup(self.GPIO_0, RPIO.IN)
 		RPIO.setup(self.GPIO_1, RPIO.IN)
-		RPIO.add_interrupt_callback(self.GPIO_0, self.addBitToTag, edge = edge, pull_up_down = pull_up_down)
-		RPIO.add_interrupt_callback(self.GPIO_1, self.addBitToTag, edge = edge, pull_up_down = pull_up_down)
+		RPIO.add_event_detect(self.GPIO_0, self.addBitToTag, callback=pull_up_down)
+		RPIO.add_event_detect(self.GPIO_1, self.addBitToTag, callback=pull_up_down)
 		 
 		#Initializing timer
 		self.t = threading.Timer(0.1, self.processTag)
 		self.t.start()
 
 	def removeReader(self):
-		RPIO.del_interrupt_callback(self.GPIO_0)
-		RPIO.del_interrupt_callback(self.GPIO_1)
+		RPIO.remove_event_detect(self.GPIO_0)
+		RPIO.remove_event_detect(self.GPIO_1)
 
 	#Method triggered after Timer tick that prints out the tag
 	def processTag(self):
