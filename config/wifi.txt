@@ -1,0 +1,3 @@
+interface wlp5s0
+ssid 1.Kat
+pass 1234qwer
