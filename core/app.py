@@ -24,11 +24,12 @@ class App:
                 interface=wifi_credentials['interface_name'])
         F.run()
         
+        ''' 
         GPIO.setup(channel_list.high_channel_in_list, GPIO.IN, initial=GPIO.LOW)
         GPIO.setup(channel_list.high_channel_out_list, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(channel_list.low_channel_in_list, GPIO.IN, initial=GPIO.LOW)
-        GPIO.setup(channel_list.low_channel_out_list, GPIO.OUT, initial=GPIO.HIGH)
-
+        GPIO.setup(channel_list.low_channel_out_list, GPIO.OUT, initial=GPIO.HIGH) 
+        '''
 
         # Hook the SIGINT
         signal.signal(signal.SIGINT, self.end_read)
