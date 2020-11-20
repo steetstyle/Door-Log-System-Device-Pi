@@ -35,6 +35,7 @@ class App:
         # Hook the SIGINT
         signal.signal(signal.SIGINT, self.end_read)
         self.continue_reading = True
+        GPIO.setmode(GPIO.BOARD)
 
         self.readersList = [
             CardReader("reader", 23, 24, self.TIMEOUT),
