@@ -8,7 +8,6 @@ if not os.getegid() == 0:
 
 from core.app import App
 
-import os
 if __name__ == "__main__":
     app = App()
     app.run()
