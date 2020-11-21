@@ -48,7 +48,7 @@ class CardReader(object):
 			print("[" + self.name + "] Frame of length (" + str(len(self.tag)) + "):" + self.tag + " DROPPED")
 		elif self.verifyParity(self.tag):
 			print("[" + self.name + "] Frame of length (" + str(len(self.tag)) + "): " + self.tag + " (" + str(CardReader.binaryToInt(self.tag)) + ") OK KOI" )
-			print("Tag : " + self.tag)
+		print("Tag : " + self.tag)
 		
 		self.tag = ""
 
