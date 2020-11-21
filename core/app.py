@@ -6,9 +6,8 @@ from helpers.read_wifi_credentials import ReadWifiCredentials
 from config import channel_list
 import OPi.GPIO as GPIO
 from time import sleep
-from helpers.MFRC522 import MFRC522
-import signal
 from helpers.CardReader import CardReader
+import signal
 
 class App:
 
@@ -38,11 +37,11 @@ class App:
         GPIO.setmode(GPIO.BOARD)
 
         self.readersList = [
-            CardReader("reader", 23, 24, self.TIMEOUT),
+            CardReader("reader", 24, 26, self.TIMEOUT),
         ]
 
         #Starting readers
-        readersCount = 0
+        readersCount = 1
         for reader in self.readersList:
             print("Initializing reader " + str(readersCount) + "...")
             reader.registerReader()
@@ -51,7 +50,7 @@ class App:
 
     def run(self):
         while self.continue_reading:
-            print('working')        
+            pass        
             
     def end_read(self,signal,frame):
         print("Ctrl+C captured, ending read.")
