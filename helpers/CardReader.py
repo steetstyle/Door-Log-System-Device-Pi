@@ -26,11 +26,11 @@ class CardReader(object):
 		elif gpio_id == self.GPIO_1:
 			self.tag += "1"	
 
-	def registerReader(self, edge = 'falling', pull_up_down=RPIO.PUD_UP):
+	def registerReader(self, edge = RPIO.FALLING, pull_up_down=RPIO.PUD_UP):
 		RPIO.setup(self.GPIO_0, RPIO.IN)
 		RPIO.setup(self.GPIO_1, RPIO.IN)
-		RPIO.add_event_detect(self.GPIO_0, pull_up_down, callback=self.addBitToTag)
-		RPIO.add_event_detect(self.GPIO_1, pull_up_down, callback=self.addBitToTag)
+		RPIO.add_event_detect(self.GPIO_0, edge, callback=self.addBitToTag)
+		RPIO.add_event_detect(self.GPIO_1, edge, callback=self.addBitToTag)
 		 
 		#Initializing timer
 		self.t = threading.Timer(0.1, self.processTag)
