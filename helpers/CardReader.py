@@ -14,7 +14,7 @@ class CardReader(object):
 		self.TIMEOUT = TIMEOUT #Real time allowed for the transmission
 		super().__init__()
 
-	def addBitToTag(self, gpio_id, val):
+	def addBitToTag(self, gpio_id):
 		#Beginning of a new frame, we start the timer
 		if self.tag == "":
 			self.t = threading.Timer(self.TIMEOUT, self.processTag)
@@ -26,7 +26,7 @@ class CardReader(object):
 		elif gpio_id == self.GPIO_1:
 			self.tag += "1"	
 
-	def registerReader(self, edge = 'falling', pull_up_down=RPIO.PUD_UP):
+	def registerReader(self, edge = , pull_up_down=RPIO.PUD_UP):
 		RPIO.setup(self.GPIO_0, RPIO.IN)
 		RPIO.setup(self.GPIO_1, RPIO.IN)
 		RPIO.add_event_detect(self.GPIO_0, pull_up_down, callback=self.addBitToTag)
