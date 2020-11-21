@@ -52,8 +52,8 @@ class CardReader(object):
 		self.tag = ""
 
 	def verifyParity(self, binary_string):
-		first_part = binary_string[0:16]
-		second_part = binary_string[16:]
+		first_part = binary_string[0:13]
+		second_part = binary_string[13:]
 		parts = [first_part, second_part]
 		bitsTo1 = [0, 0]
 		index = 0		
