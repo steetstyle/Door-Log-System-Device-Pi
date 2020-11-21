@@ -14,7 +14,7 @@ class App:
     continue_reading = False
 
     BIT_TRANSMISSION_TIME = 0.002 #From wiegand specification
-    FRAMESIZE = 26 #Supposed size of received frame
+    FRAMESIZE = 48 #Supposed size of received frame
     FRAMETIME = FRAMESIZE * BIT_TRANSMISSION_TIME #Theoric time necessary to transfer a frame
     ALLOWANCE = 10 #Auhtorized allowance for the transmission time in percent
     TIMEOUT = FRAMETIME*(1+ALLOWANCE/100) #Real time allowed for the transmission
