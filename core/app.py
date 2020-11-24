@@ -28,8 +28,8 @@ class App:
         self.name = "Okuyucu 1 : "
         gpio.setcfg(self.GPIO_0,gpio.INPUT)
         gpio.setcfg(self.GPIO_1, gpio.INPUT)
-        gpio.pull_up(self.GPIO_0,gpio.PULLUP)
-        gpio.pull_up(self.GPIO_1, gpio.PULLUP)
+        gpio.pullup(self.GPIO_0,gpio.PULLUP)
+        gpio.pullup(self.GPIO_1, gpio.PULLUP)
         
         self.continue_reading = True
 
