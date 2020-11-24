@@ -23,8 +23,8 @@ class App:
     def setup(self):
         gpio.init()
 
-        self.GPIO_0 = port.PB11
-        self.GPIO_1 = port.PB11
+        self.GPIO_0 = port.PD14
+        self.GPIO_1 = port.PC4
         self.name = "Okuyucu 1 : "
         gpio.setcfg(self.GPIO_0,gpio.INPUT)
         gpio.setcfg(self.GPIO_1, gpio.INPUT)
