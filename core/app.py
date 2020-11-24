@@ -1,92 +1,58 @@
 import sys
 import os
 sys.path.append(os.getcwd())
+from helpers.wifi import Finder
+from helpers.read_wifi_credentials import ReadWifiCredentials
+from config import channel_list
+import OPi.GPIO as GPIO
 from time import sleep
-from pyA20.gpio import gpio
-from pyA20.gpio import port
-import threading
+from helpers.CardReader import CardReader
+import signal
 
 class App:
 
     continue_reading = False
-    name = ""
-    tag = ""
+
     BIT_TRANSMISSION_TIME = 0.002 #From wiegand specification
     FRAMESIZE = 48 #Supposed size of received frame
     FRAMETIME = FRAMESIZE * BIT_TRANSMISSION_TIME #Theoric time necessary to transfer a frame
     ALLOWANCE = 10 #Auhtorized allowance for the transmission time in percent
     TIMEOUT = FRAMETIME*(1+ALLOWANCE/100) #Real time allowed for the transmission
-    
+
+    reader_list = []
+
     def __init__(self):
         self.setup()
 
     def setup(self):
-        gpio.init()
+        wifi_credentials = ReadWifiCredentials().read()
+        F = Finder(server_name=wifi_credentials['ssid'],
+                password=wifi_credentials['password'],
+                interface=wifi_credentials['interface_name'])
+        F.run()
 
-        self.GPIO_0 = port.PD14
-        self.GPIO_1 = port.PC7
-        self.name = "Okuyucu 1 : "
-        gpio.setcfg(self.GPIO_0,gpio.INPUT)
-        gpio.setcfg(self.GPIO_1, gpio.INPUT)
-        gpio.pullup(self.GPIO_0,gpio.PULLUP)
-        gpio.pullup(self.GPIO_1, gpio.PULLUP)
-        
+        # Hook the SIGINT
+        signal.signal(signal.SIGINT, self.end_read)
         self.continue_reading = True
+        GPIO.setmode(GPIO.BOARD)
 
-    def addBitToTag(self, gpio_id):
-        #Beginning of a new frame, we start the timer
-        if self.tag == "":
-            self.t = threading.Timer(self.TIMEOUT, self.processTag)
-            self.t.start()
+        self.readersList = [
+            CardReader("reader", GPIO.PA+1, GPIO.PA+11, self.TIMEOUT),
+        ]
 
-        #We check wether we received a 0 or a 1
-        if gpio_id == self.GPIO_0:
-            self.tag += "0"
-        elif gpio_id == self.GPIO_1:
-            self.tag += "1"
+        #Starting readers
+        readersCount = 1
+        for reader in self.readersList:
+            print("Initializing reader " + str(readersCount) + "...")
+            reader.registerReader()
+            print(" Done !")
+            readersCount += 1
 
-    def processTag(self):
-        if self.tag == "":
-            return
-        elif len(self.tag) < 10:
-            print("[" + self.name + "] Frame of length (" + str(len(self.tag)) + "):" + self.tag + " DROPPED")
-        elif self.verifyParity(self.tag):
-            print("[" + self.name + "] Frame of length (" + str(len(self.tag)) + "): " + self.tag + " (" + str(self.binaryToInt(self.tag)) + ") OK KOI" )
-        print("Tag : " + self.tag)
-
-        self.tag = ""
-        
-
-    def verifyParity(self, binary_string):
-        first_part = binary_string[0:13]
-        second_part = binary_string[13:]
-        parts = [first_part, second_part]
-        bitsTo1 = [0, 0]
-        index = 0		
-
-        for part in parts:
-            bitsTo1[index] = part.count('1')
-            index += 1
-
-        if bitsTo1[0] % 2 != 0 or bitsTo1[1] % 2 != 1:
-            print("[" + self.name + "] Frame of length (" + str(len(self.tag)) + "): " + self.tag + " (" + str(self.binaryToInt(self.tag)) + ") - PARITY CHECK FAILED")
-            return False
-        return True
-            
     def run(self):
         while self.continue_reading:
-            if gpio.input(self.GPIO_0) == 1:
-                self.addBitToTag(self.GPIO_0)
-            if gpio.input(self.GPIO_1) == 1:
-                self.addBitToTag(self.GPIO_1)
-
-    def binaryToInt(self, binary_string):
-        print(binary_string)
-        binary_string = binary_string[1:-1] #Removing the first and last bit (Non-data bits)
-        print(binary_string)
-        result = int(binary_string, 2)
-        return result
-    
+            pass        
             
     def end_read(self,signal,frame):
-        pass
+        print("Ctrl+C captured, ending read.")
+        self.continue_reading = False
+        GPIO.cleanup()
