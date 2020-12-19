@@ -37,7 +37,7 @@ class App:
         GPIO.setmode(GPIO.BOARD)
 
         self.readersList = [
-            CardReader("reader", 16, 12, self.TIMEOUT),
+            CardReader("reader", 18, 20, self.TIMEOUT),
         ]
 
         #Starting readers
