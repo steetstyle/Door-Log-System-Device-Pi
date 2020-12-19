@@ -28,15 +28,16 @@ print("Press Ctrl-C to stop.")
 while continue_reading:
     
     # Scan for cards    
-    (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+    (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+ 
 
     # If a card is found
     if status == MIFAREReader.MI_OK:
         print("Card detected")
     
     # Get the UID of the card
-    (status,uid) = MIFAREReader.MFRC522_Anticoll()
-
+    (status, uid) = MIFAREReader.MFRC522_Anticoll()
+    
     # If we have the UID, continue
     if status == MIFAREReader.MI_OK:
 
