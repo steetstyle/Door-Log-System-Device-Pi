@@ -1,4 +1,4 @@
-# DoorLogSystemPi
+# Door Log System Device Pi
 
 # Using External Libraries
 OrangePi.GPIO - https://github.com/Jeremie-C/OrangePi.GPIO
